@@ -58,6 +58,7 @@ def parse_args():
     parser.add_argument('--boxsize', type=float, default=2000.0, help='Size of the simulation box in Mpc/h.')
     parser.add_argument('--rewrite_cat', action='store_true', help='Whether to rewrite the input catalog in ASCII format.')
     parser.add_argument('--workdir', type=str, default='works/test_prep_cutsky', help='Working directory to save outputs.')
+    parser.add_argument('--footprint', type=str, default='/global/homes/s/siyizhao/lib/cutsky/scripts/Y3_dark_circle.dat_final_res7.ply', help='Path to the footprint file.')
     parser.add_argument('--galactic_cap', type=str, choices=['N', 'S'], default='N', help="Galactic cap to use ('N' or 'S').")
     parser.add_argument('--nz_path', type=str, default='/global/homes/s/siyizhao/projects/fihobi/data/nz/QSO_NGC_nz_v2.txt', help='Path to the n(z) file.')
     parser.add_argument('--zmin', type=float, default=2.8, help='Minimum redshift.')
@@ -72,6 +73,7 @@ if __name__ == "__main__":
     boxsize = args.boxsize
     WORKDIR = args.workdir
     os.makedirs(WORKDIR, exist_ok=True)
+    footprint_path = args.footprint
     galactic_cap = args.galactic_cap  # 'N' or 'S'
     nz_path = args.nz_path
     zmin = args.zmin
@@ -93,6 +95,7 @@ if __name__ == "__main__":
         box_path=box_path,
         boxsize=boxsize,
         lc_out_path=lc_path,
+        footprint_path=footprint_path,
         galactic_cap=galactic_cap,
         nz_path=nz_path,
         zmin=zmin,
