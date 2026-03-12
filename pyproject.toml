@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "LSSlab"                # display name; normalized to lsslab in index
+version = "0.0.1"
+description = "Cosmological Large-Scale Structure Analysis Lab."
+readme = "README.md"
+license = { text = "BSD 3-Clause License" }
+requires-python = ">=3.8"
+authors = [{ name = "Siyi Zhao", email = "siyizhao17@gmail.com" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+]
+dependencies = []  # add runtime deps here
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lsslab"]
