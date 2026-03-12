@@ -18,6 +18,10 @@ python -m pip install -e .
 python -m pytest
 ```
 
+### Scripts with extra deps
+
+Some helper scripts in `scripts/` may require additional packages (e.g., cutsky prep). Keep those dependencies in a separate environment. See `docs/extra-deps.md` for notes.
+
 ## Usage
 
 ```python
