@@ -15,7 +15,9 @@ classifiers = [
   "License :: OSI Approved :: BSD License",
   "Operating System :: OS Independent",
 ]
-dependencies = []  # add runtime deps here
+dependencies = [
+  "numpy>=1.22,<1.25",
+]  # add runtime deps here
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/lsslab"]

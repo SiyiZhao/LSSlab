@@ -5,7 +5,7 @@ Lightweight scaffolding for the LSSlab Python package.
 ## Installation (local dev)
 
 ```
-pip install -e .
+python -m pip install -e .
 ```
 
 ### Recommended: isolated env
@@ -13,8 +13,9 @@ pip install -e .
 ```
 python -m venv .venv
 source .venv/bin/activate
-pip install --upgrade pip
-pip install -e .
+python -m pip install --upgrade pip
+python -m pip install -e .
+python -m pytest
 ```
 
 ## Usage
