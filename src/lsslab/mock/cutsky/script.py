@@ -15,6 +15,7 @@ LSSLAB_ROOT = Path(__file__).resolve().parents[4]
 def cutsky_script(
     workdir: Path | str,
     box_path: Path | str,
+    boxL: float=2000.0,
     footprint: Path | str = "/global/homes/s/siyizhao/lib/cutsky/scripts/Y3_dark_circle.dat_final_res7.ply",
     galactic_cap: str = "N",
     nz_path: Path | str = LSSLAB_ROOT / "examples/data/example_nz.txt",
@@ -43,9 +44,10 @@ nz={nz_path}
 zmin={zmin}
 zmax={zmax}
 cat={box_path}
+boxL={boxL}
 
 mkdir -p $workdir
-python prep_cutsky.py --catalog_path $cat --rewrite_cat --workdir $workdir --footprint $footprint --galactic_cap $GC --nz_path $nz --zmin $zmin --zmax $zmax
+python prep_cutsky.py --catalog_path $cat --boxsize $boxL --rewrite_cat --workdir $workdir --footprint $footprint --galactic_cap $GC --nz_path $nz --zmin $zmin --zmax $zmax
 echo "\nRunning cutsky..."
 ~/lib/cutsky/CUTSKY -c $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}.conf > $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}.log 2>&1
 echo "Done."
