@@ -6,10 +6,12 @@ from .nz import prepare_nz
 from .config import cutsky_cfg
 from .script import cutsky_script
 from .pipeline import CutskyRunner
+from .random import write_random_catalog
 
 __all__ = [
     "prepare_nz",
     "cutsky_cfg",
     "cutsky_script",
     "CutskyRunner",
+    "write_random_catalog",
 ]

@@ -7,15 +7,15 @@ from lsslab.mock.cutsky import prepare_nz
 
 def main() -> None:
     # Replace these with your actual paths
-    source = Path("/global/cfs/cdirs/desi/survey/catalogs/DA2/LSS/loa-v1/LSScats/v2/PIP/QSO_NGC_nz.txt")
+    source = Path("/global/cfs/cdirs/desi/survey/catalogs/DA2/LSS/loa-v1/LSScats/v2/PIP/QSO_SGC_nz.txt")
     here = Path(__file__).parent
-    workdir = here / "data" / "demo_cutsky"
+    workdir = here / "data" / "demo_CutskyRunner"
 
-    dest = workdir / "example_nz.txt"
+    dest = workdir / "QSO_SGC_nz.txt"
     prepare_nz(source, dest)
 
     # Optional scaling with `times`
-    dest = workdir / "example_nz_times_10.txt"
+    dest = workdir / "QSO_SGC_nz_times_10.txt"
     prepare_nz(source, dest, times=10)
 
 

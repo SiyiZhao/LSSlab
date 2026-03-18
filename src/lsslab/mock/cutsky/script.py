@@ -15,12 +15,14 @@ LSSLAB_ROOT = Path(__file__).resolve().parents[4]
 def cutsky_script(
     workdir: Path | str,
     box_path: Path | str,
-    boxL: float=2000.0,
+    boxL: float = 2000.0,
     footprint: Path | str = "/global/homes/s/siyizhao/lib/cutsky/scripts/Y3_dark_circle.dat_final_res7.ply",
     galactic_cap: str = "N",
     nz_path: Path | str = LSSLAB_ROOT / "examples/data/example_nz.txt",
-    zmin: float = 0.405,
+    zmin: float = 0.4,
     zmax: float = 0.6,
+    rewrite_cat: bool = True,
+    prep_exe: Path | str | None = None,
     write_to: Path | str | None = None,
     make_executable: bool = False,
 ) -> str:
@@ -31,11 +33,14 @@ def cutsky_script(
     ----------
     """
 
+    prep_exe = prep_exe or (LSSLAB_ROOT / "scripts" / "prep_cutsky.py")
+    rewrite_flag = " --rewrite_cat" if rewrite_cat else ""
+
     scripts = f"""#!/bin/bash
 set -euo pipefail
 
 source ~/envs/lsslab_extra/bin/activate
-cd {LSSLAB_ROOT}/scripts
+PREP_EXE={prep_exe}
 
 workdir={workdir}
 footprint={footprint}
@@ -47,7 +52,7 @@ cat={box_path}
 boxL={boxL}
 
 mkdir -p $workdir
-python prep_cutsky.py --catalog_path $cat --boxsize $boxL --rewrite_cat --workdir $workdir --footprint $footprint --galactic_cap $GC --nz_path $nz --zmin $zmin --zmax $zmax
+python $PREP_EXE --catalog_path $cat --boxsize $boxL{rewrite_flag} --workdir $workdir --footprint $footprint --galactic_cap $GC --nz_path $nz --zmin $zmin --zmax $zmax
 echo "\nRunning cutsky..."
 ~/lib/cutsky/CUTSKY -c $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}.conf > $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}.log 2>&1
 echo "Done."
