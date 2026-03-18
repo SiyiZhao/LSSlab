@@ -1,6 +1,8 @@
 # LSSlab
 
-Lightweight scaffolding for the LSSlab Python package.
+LSSlab is a Python toolkit collection for the analysis of Cosmological Large-Scale Structure (LSS).
+
+*Let our Universe be a big Lab!* 
 
 ## Installation (local dev)
 
