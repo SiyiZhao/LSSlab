@@ -27,10 +27,57 @@ def cutsky_script(
     make_executable: bool = False,
 ) -> str:
     """
-    Return the shell script content to call `cutsky` with the given config. If `write_to` is provided, the script is also written to that path.
+    Return the shell script content to call `cutsky` with the given config.
+
+    If `write_to` is provided, the script is also written to that path.
 
     Parameters
     ----------
+    workdir : str or Path
+        Working directory for cutsky operations (created if missing).
+    box_path : str or Path
+        Path to the input simulation box catalog (e.g., ASCII or h5).
+    boxL : float, optional
+        Size of the simulation box in Mpc/h. Default: 2000.0.
+    footprint : str or Path, optional
+        Path to the footprint polygon file (PLY format). Default: DESI Y3 footprint.
+    galactic_cap : str, optional
+        Galactic cap to use: \"N\" (NGC) or \"S\" (SGC). Default: \"N\".
+    nz_path : str or Path, optional
+        Path to the n(z) file. Default: example file.
+    zmin : float, optional
+        Minimum redshift. Default: 0.4.
+    zmax : float, optional
+        Maximum redshift. Default: 0.6.
+    rewrite_cat : bool, optional
+        If True, add --rewrite_cat flag to prep_cutsky. Default: True.
+    prep_exe : str or Path, optional
+        Path to prep_cutsky.py executable. If None, defaults to
+        ``${LSSLAB_ROOT}/scripts/prep_cutsky.py``.
+    write_to : str or Path, optional
+        If provided, write the script to this file. Default: None.
+    make_executable : bool, optional
+        If True, add execute permissions to the output file. Default: False.
+
+    Returns
+    -------
+    str
+        The shell script content (always returned).
+
+    Examples
+    --------
+    >>> from lsslab.mock.cutsky import cutsky_script
+    >>> script = cutsky_script(
+    ...     workdir=\"outputs\",
+    ...     box_path=\"box.dat.h5\",
+    ...     boxL=6000.0,
+    ...     galactic_cap=\"N\",
+    ...     nz_path=\"nz_N.txt\",
+    ...     zmin=0.8,
+    ...     zmax=3.5,
+    ...     write_to=\"run_cutsky.sh\",
+    ...     make_executable=True,
+    ... )
     """
 
     prep_exe = prep_exe or (LSSLAB_ROOT / "scripts" / "prep_cutsky.py")

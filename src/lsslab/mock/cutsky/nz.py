@@ -17,20 +17,37 @@ def prepare_nz(
     times: float = 1.0,
 ) -> None:
     """
-    Transform a standard DESI-format n(z) file into the format required by `cutsky`.
+    Converts 6-column DESI n(z) format to 2-column cutsky format.
 
     Parameters
     ----------
     source : str or Path
-        Input n(z) file in the standard NERSC format.
+        Input n(z) file in DESI format with columns: zmid zlow zhigh n(z) Nbin Vol_bin
     dest : str or Path
         Output path for the converted n(z) file to be consumed by `cutsky`.
     times : float, optional
-        Optional scaling factor to apply to n(z) values.
+        Optional scaling factor to apply to n(z) values. Default: 1.0 (no scaling).
+
+    Returns
+    -------
+    None
+
+    Side Effects
+    -----------
+    Creates output file at `dest` with 2-column format: zmid n(z)
+    Prints confirmation message to stdout.
+
+    Examples
+    --------
+    >>> from lsslab.mock.cutsky import prepare_nz
+    >>> prepare_nz("input/desi_nz.txt", "output/nz_cutsky.txt")
+    [write] n(z) file -> output/nz_cutsky.txt
+
+    With scaling:
+    >>> prepare_nz("desi_nz.txt", "nz_cutsky.txt", times=2.0)  # Double the n(z)
     """
 
     data = np.loadtxt(source)
-    # zmid zlow zhigh n(z) Nbin Vol_bin
     zmid = data[:, 0]
     nz = data[:, 3]
     zlow = data[:, 1]

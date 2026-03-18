@@ -18,10 +18,43 @@ def write_random_catalog(
     chunk_size: int = int(1e7),
     seed: int = 42,
 ) -> Path:
-    """Write a uniform random catalog inside a box of size ``boxL``.
+    """
+    Write a uniform random catalog inside a box of size ``boxL``.
 
     Generates ``num`` points with coordinates in ``[0, boxL)`` for each axis and
-    streams them to disk in chunks to avoid large memory use.
+    streams them to disk in chunks to avoid large memory use. Output is a space-separated
+    ASCII file with columns ``x y z``.
+
+    Parameters
+    ----------
+    ofile : str or Path
+        Output file path; parent directories are created if missing.
+    num : int
+        Number of random points to generate.
+    boxL : float
+        Size of the simulation box in Mpc/h.
+    chunk_size : int, optional
+        Number of points to buffer in memory at once. Default: 10,000,000.
+        Larger values are faster but use more memory.
+    seed : int, optional
+        Random seed for reproducibility. Default: 42.
+
+    Returns
+    -------
+    Path
+        Path to the generated random catalog file.
+
+    Examples
+    --------
+    >>> from lsslab.mock.cutsky import write_random_catalog
+    >>> path = write_random_catalog(
+    ...     ofile=\"random.dat\",
+    ...     num=int(1e8),
+    ...     boxL=6000.0,
+    ...     seed=42,
+    ... )
+    >>> print(path)
+    random.dat
     """
 
     ofile = Path(ofile)
