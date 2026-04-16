@@ -4,20 +4,20 @@ LSSlab is a Python toolkit collection for the analysis of Cosmological Large-Sca
 
 *Let our Universe be a big Lab!* 
 
-## Installation (local dev)
+## Installation
 
-```
-python -m pip install -e .
+Install from PyPI:
+
+```bash
+pip install LSSlab
 ```
 
-### Recommended: isolated env
+Alternatively, install from a local clone with `uv`:
 
-```
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e .
-python -m pytest
+```bash
+git clone https://github.com/SiyiZhao/LSSlab.git
+cd LSSlab
+uv sync
 ```
 
 ### Scripts with extra deps
@@ -34,9 +34,33 @@ print(lsslab.__version__)
 
 ## Development
 
-- Tooling (one-time): `pip install --upgrade build twine`
-- Build: `python -m build`
-- Check artifacts: `python -m twine check dist/*`
+Set up the project environment with `uv`:
+
+```bash
+uv sync
+```
+
+Run the test suite in the project environment:
+
+```bash
+uv run pytest
+```
+
+Build the wheel:
+
+```bash
+uv build --wheel
+```
+
+Recommended pre-release smoke test from a clean environment:
+
+```bash
+python -m venv /tmp/lsslab-wheel-test
+source /tmp/lsslab-wheel-test/bin/activate
+python -m pip install dist/lsslab-*.whl
+python -c "import lsslab; import lsslab.mock.cutsky"
+deactivate
+```
 
 ## License
 

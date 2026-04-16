@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.2] - 2026-04-15
+## [0.2.3] - 2026-04-16
 
 ### Changed
 - Replaced `prepare_random_box` with `prepare_random_boxes` to support `nran` random-box realizations with shared `num` and different seeds.
@@ -9,6 +9,7 @@
 - Refreshed examples, tests, and docs to follow the new multi-seed random workflow.
 - Added `tests/conftest.py` so `pytest` can import the `src/` layout package without manually setting `PYTHONPATH`.
 - Updated the release workflow to publish wheel-only artifacts for now, matching the current PyPI release practice while `sdist` remains skipped.
+- Updated `README.md` for installation and development.
 
 ## [0.1.0] - 2026-03-18
 
