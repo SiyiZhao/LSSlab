@@ -62,6 +62,17 @@ python -c "import lsslab; import lsslab.mock.cutsky"
 deactivate
 ```
 
+Release a new version by updating the version metadata, committing the release
+files, and pushing a version tag:
+
+```bash
+uv version --bump patch
+git add pyproject.toml uv.lock CHANGELOG.md
+git commit -m "Release vX.Y.Z"
+git tag vX.Y.Z
+git push origin main --tags
+```
+
 ## License
 
 BSD-3-Clause (see LICENSE)
