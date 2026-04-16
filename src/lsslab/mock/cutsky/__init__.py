@@ -14,7 +14,7 @@ Typical workflow
 1. Prepare n(z) files using :func:`prepare_nz`
 2. Create a :class:`CutskyRunner` with shared settings (workdir, footprint, nz_path, boxL)
 3. Call :meth:`CutskyRunner.generate_data` to create data catalog scripts
-4. Call :meth:`CutskyRunner.prepare_random_box` to generate random box files
+4. Call :meth:`CutskyRunner.prepare_random_boxes` to generate random box files
 5. Call :meth:`CutskyRunner.generate_random` to create random catalog scripts
 6. Execute the generated shell scripts to run cutsky
 

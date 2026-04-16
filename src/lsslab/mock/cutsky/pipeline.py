@@ -200,39 +200,43 @@ class CutskyRunner:
         return scripts
 
 
-    def prepare_random_box(
+    def prepare_random_boxes(
         self,
         *,
         num: int,
         seed: int,
+        nran: int = 1,
         boxL_random: float | None = None,
-    ) -> Path:
+    ) -> list[Path]:
         """
-        Generate a uniform random box catalog.
+        Generate one or more uniform random box catalogs.
 
-        Creates a file with uniformly distributed random points in a cubic box
-        of size boxL_random. The file is stored under ``workdir/RANDOM`` with a
-        filename encoding the box size, point count, and seed.
+        Creates ``nran`` files with uniformly distributed random points in a cubic
+        box of size ``boxL_random``. The files are stored under ``workdir/RANDOM``
+        with filenames encoding the box size, point count, and seed.
 
         Parameters
         ----------
         num : int
-            Number of random points to generate.
+            Number of random points to generate for each box.
         seed : int
-            Random seed for reproducibility.
+            Starting random seed for reproducibility.
+        nran : int, optional
+            Number of random boxes to generate. Seeds are assigned as
+            ``seed + i`` for ``i = 0, ..., nran - 1``. Default is 1.
         boxL_random : float, optional
             Box size; defaults to runner's boxL_random.
 
         Returns
         -------
-        Path
-            Path to the generated random box file.
-            If the file already exists, it is not regenerated.
+        list[Path]
+            Paths to the generated random box files. Existing files are reused
+            and not regenerated.
 
         Examples
         --------
-        >>> box_path = runner.prepare_random_box(num=int(3e8), seed=42)
-        >>> print(box_path)
+        >>> box_paths = runner.prepare_random_boxes(num=int(3e7), seed=42, nran=2)
+        >>> print(box_paths[0])
         outputs/RANDOM/random_boxL6000_N3e8_seed42.dat
         """
 
@@ -240,18 +244,28 @@ class CutskyRunner:
         odir.mkdir(parents=True, exist_ok=True)
         boxL_random = boxL_random or self.boxL_random
         num = int(num)
+        nran = int(nran)
+        if nran < 1:
+            raise ValueError("nran must be at least 1.")
         num_formatted = f"{num:.1e}".replace('e+0', 'e').replace('e-0', 'e-')
-        ofile=odir / f"random_boxL{int(boxL_random)}_N{num_formatted}_seed{seed}.dat"
-        if ofile.exists():
-            print(f"Random box file {ofile} already exists; skipping generation.")
-            return ofile
-        
-        box_path = write_random_catalog(
-            ofile=ofile,
-            num=num,
-            boxL=boxL_random,
-            seed=seed,
-        )
+
         self.boxL_random = boxL_random
-        
-        return box_path
+
+        box_paths: list[Path] = []
+        for offset in range(nran):
+            current_seed = seed + offset
+            ofile = odir / f"random_boxL{int(boxL_random)}_N{num_formatted}_seed{current_seed}.dat"
+            if ofile.exists():
+                print(f"Random box file {ofile} already exists; skipping generation.")
+                box_paths.append(ofile)
+                continue
+
+            box_path = write_random_catalog(
+                ofile=ofile,
+                num=num,
+                boxL=boxL_random,
+                seed=current_seed,
+            )
+            box_paths.append(box_path)
+
+        return box_paths

@@ -131,8 +131,8 @@ class TestCutskyRunner:
         assert runner.footprint_path == sample_files["footprint"]
         assert runner.boxL == 6000.0
 
-    def test_runner_prepare_random_box(self, temp_workdir, sample_files):
-        """Test prepare_random_box method."""
+    def test_runner_prepare_random_boxes(self, temp_workdir, sample_files):
+        """Test prepare_random_boxes method."""
         runner = CutskyRunner(
             workdir=temp_workdir,
             footprint_path=sample_files["footprint"],
@@ -143,20 +143,23 @@ class TestCutskyRunner:
             boxL=1000.0,
         )
         
-        result = runner.prepare_random_box(num=50, seed=42)
+        result = runner.prepare_random_boxes(num=50, seed=42, nran=3)
         
-        # Check that file was created
-        assert result.exists()
-        
-        # Check that it's in the RANDOM directory
-        assert result.parent.name == "RANDOM"
-        
-        # Check file content
-        lines = result.read_text().strip().split("\n")
-        assert len(lines) == 50
+        assert len(result) == 3
+        assert [path.name for path in result] == [
+            "random_boxL1000_N5.0e1_seed42.dat",
+            "random_boxL1000_N5.0e1_seed43.dat",
+            "random_boxL1000_N5.0e1_seed44.dat",
+        ]
 
-    def test_runner_prepare_random_box_skip_existing(self, temp_workdir, sample_files):
-        """Test that prepare_random_box skips existing files."""
+        for path in result:
+            assert path.exists()
+            assert path.parent.name == "RANDOM"
+            lines = path.read_text().strip().split("\n")
+            assert len(lines) == 50
+
+    def test_runner_prepare_random_boxes_skip_existing(self, temp_workdir, sample_files):
+        """Test that prepare_random_boxes skips existing files."""
         runner = CutskyRunner(
             workdir=temp_workdir,
             footprint_path=sample_files["footprint"],
@@ -168,18 +171,32 @@ class TestCutskyRunner:
         )
         
         # First call
-        result1 = runner.prepare_random_box(num=50, seed=42)
-        mtime1 = result1.stat().st_mtime
+        result1 = runner.prepare_random_boxes(num=50, seed=42, nran=2)
+        mtimes1 = [path.stat().st_mtime for path in result1]
         
         # Second call should skip
         import time
         time.sleep(0.1)  # Ensure time difference
-        result2 = runner.prepare_random_box(num=50, seed=42)
-        mtime2 = result2.stat().st_mtime
+        result2 = runner.prepare_random_boxes(num=50, seed=42, nran=2)
+        mtimes2 = [path.stat().st_mtime for path in result2]
         
-        # File should not be modified
-        assert mtime1 == mtime2
+        assert mtimes1 == mtimes2
         assert result1 == result2
+
+    def test_runner_prepare_random_boxes_rejects_invalid_nran(self, temp_workdir, sample_files):
+        """Test prepare_random_boxes validates nran."""
+        runner = CutskyRunner(
+            workdir=temp_workdir,
+            footprint_path=sample_files["footprint"],
+            nz_path={
+                "N": sample_files["nz_N"],
+                "S": sample_files["nz_S"],
+            },
+            boxL=1000.0,
+        )
+
+        with pytest.raises(ValueError, match="nran must be at least 1"):
+            runner.prepare_random_boxes(num=50, seed=42, nran=0)
 
 
 class TestIntegration:
@@ -199,10 +216,10 @@ class TestIntegration:
         )
         
         # Generate random box
-        box_path = runner.prepare_random_box(num=100, seed=42)
+        box_paths = runner.prepare_random_boxes(num=100, seed=42, nran=2)
         
-        # Verify random box exists
-        assert box_path.exists()
+        assert len(box_paths) == 2
+        assert all(box_path.exists() for box_path in box_paths)
         
         # Verify directory structure
         assert (temp_workdir / "RANDOM").exists()
