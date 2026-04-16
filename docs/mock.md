@@ -22,7 +22,12 @@ Generates light-cone mock catalogs using the external [cutsky](https://github.co
 - Multi-galactic-cap support (NGC, SGC)
 - N(z) file transformation and validation
 - Automatic shell script generation
-- Uniform random box generation
+- Uniform random box generation with multiple seeds via `nran`
+
+Recommended random-catalog workflow:
+- Use the same n(z) for data and random catalogs.
+- If you want randoms to be several times denser than the data sample, generate
+  multiple random realizations with different seeds instead of scaling n(z).
 
 **Quick Start**: See `examples/cutsky_runner_demo.py` for a complete working example.
 

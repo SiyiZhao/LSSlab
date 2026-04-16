@@ -32,7 +32,10 @@ class CutskyRunner:
     boxL : float
         Default box size in Mpc/h for data catalogs.
     nz_path_random : Mapping[str, Path], optional
-        Separate n(z) paths for random catalogs; defaults to nz_path.
+        Optional override for random-catalog n(z) paths; defaults to nz_path.
+        In most workflows this should be left unset so data and random use the
+        same n(z), while higher random counts are obtained by generating
+        multiple random realizations with different seeds.
     boxL_random : float, optional
         Separate box size for random catalogs; defaults to boxL.
     """
@@ -135,9 +138,10 @@ class CutskyRunner:
         self,
         cases: Sequence[Mapping[str, Any]] | Mapping[str, Any],
         *,
+        box_paths: Sequence[Path] | Path,
         make_executable: bool = True,
         rewrite_cat: bool = False,
-        nz_path: Path | str | None = None,
+        nz_path: Mapping[str, Path] | None = None,
         prep_exe: Path | str | None = None,
     ) -> list[Path]:
         """
@@ -149,13 +153,21 @@ class CutskyRunner:
         Parameters
         ----------
         cases : dict or list of dict
-            Same structure as :meth:`generate_data`.
+            Same structure as :meth:`generate_data`, except ``box_path`` is not
+            included here and is supplied separately via ``box_paths``.
+        box_paths : Path or sequence of Path
+            One or more random box catalogs to turn into random lightcones.
+            The index in this sequence is used as the default realization id in
+            generated filenames.
         make_executable : bool, optional
             If True, add execute permissions. Default: True.
         rewrite_cat : bool, optional
             If True, rewrite random box format. Default: False.
-        nz_path : Path or str, optional
-            Override the runner's nz_path_random; defaults to runner setting.
+        nz_path : Mapping[str, Path], optional
+            Override the runner's random-catalog n(z) paths; defaults to the
+            runner setting. In most workflows this should match the data n(z),
+            and larger total random counts should come from multiple seeds
+            rather than a rescaled n(z).
         prep_exe : Path or str, optional
             Path to prep_cutsky.py; defaults to ``scripts/prep_cutsky.py``.
 
@@ -169,33 +181,39 @@ class CutskyRunner:
         wd = self.workdir / "RANDOM"
         wd.mkdir(parents=True, exist_ok=True)
         caps = nz_path.keys()
+        if isinstance(box_paths, Path):
+            normalized_box_paths = [box_paths]
+        else:
+            normalized_box_paths = [Path(box_path) for box_path in box_paths]
         
         scripts: list[Path] = []
         for case in self._normalize_cases(cases):
-            box_path = Path(case["box_path"])
             zmin = case["zmin"]
             zmax = case["zmax"]
-            
-            for cap in caps:
-                script_name = case.get("script_name", f"run_cutsky_{cap}_{zmin}_{zmax}.sh")
-                script_path = wd / script_name
+            for case_id, box_path in enumerate(normalized_box_paths):
+                for cap in caps:
+                    script_name = case.get(
+                        "script_name",
+                        f"run_cutsky_ran{case_id}_{cap}_{zmin}_{zmax}.sh",
+                    )
+                    script_path = wd / script_name
 
-                cutsky_script(
-                    workdir=wd,
-                    box_path=box_path,
-                    boxL=self.boxL_random,
-                    footprint=self.footprint_path,
-                    galactic_cap=cap,
-                    nz_path=nz_path[cap],
-                    zmin=zmin,
-                    zmax=zmax,
-                    rewrite_cat=rewrite_cat,
-                    prep_exe=prep_exe,
-                    write_to=script_path,
-                    make_executable=make_executable,
-                )
+                    cutsky_script(
+                        workdir=wd,
+                        box_path=box_path,
+                        boxL=self.boxL_random,
+                        footprint=self.footprint_path,
+                        galactic_cap=cap,
+                        nz_path=nz_path[cap],
+                        zmin=zmin,
+                        zmax=zmax,
+                        rewrite_cat=rewrite_cat,
+                        prep_exe=prep_exe,
+                        write_to=script_path,
+                        make_executable=make_executable,
+                    )
 
-                scripts.append(script_path)
+                    scripts.append(script_path)
 
         return scripts
 
@@ -237,7 +255,7 @@ class CutskyRunner:
         --------
         >>> box_paths = runner.prepare_random_boxes(num=int(3e7), seed=42, nran=2)
         >>> print(box_paths[0])
-        outputs/RANDOM/random_boxL6000_N3e8_seed42.dat
+        outputs/RANDOM/random_boxL6000_N3e7_seed42.dat
         """
 
         odir = self.workdir / "RANDOM"

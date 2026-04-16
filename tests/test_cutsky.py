@@ -215,11 +215,28 @@ class TestIntegration:
             boxL_random=6000.0,
         )
         
-        # Generate random box
         box_paths = runner.prepare_random_boxes(num=100, seed=42, nran=2)
         
         assert len(box_paths) == 2
         assert all(box_path.exists() for box_path in box_paths)
-        
-        # Verify directory structure
+
+        random_cases = [
+            {
+                "zmin": 0.8,
+                "zmax": 1.1,
+            },
+        ]
+        random_scripts = runner.generate_random(random_cases, box_paths=box_paths)
+
+        assert len(random_scripts) == 4
+        assert len(set(random_scripts)) == 4
+        assert all(script.exists() for script in random_scripts)
+        assert all(script.parent == temp_workdir / "RANDOM" for script in random_scripts)
+        assert {script.name for script in random_scripts} == {
+            "run_cutsky_ran0_N_0.8_1.1.sh",
+            "run_cutsky_ran0_S_0.8_1.1.sh",
+            "run_cutsky_ran1_N_0.8_1.1.sh",
+            "run_cutsky_ran1_S_0.8_1.1.sh",
+        }
+
         assert (temp_workdir / "RANDOM").exists()
