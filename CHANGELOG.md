@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.1] - 2026-04-15
+## [0.2.2] - 2026-04-15
 
 ### Changed
 - Replaced `prepare_random_box` with `prepare_random_boxes` to support `nran` random-box realizations with shared `num` and different seeds.
