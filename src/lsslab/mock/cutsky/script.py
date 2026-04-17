@@ -21,6 +21,7 @@ def cutsky_script(
     nz_path: Path | str = LSSLAB_ROOT / "examples/data/example_nz.txt",
     zmin: float = 0.4,
     zmax: float = 0.6,
+    suffix: str = "",
     rewrite_cat: bool = True,
     prep_exe: Path | str | None = None,
     write_to: Path | str | None = None,
@@ -95,13 +96,14 @@ GC={galactic_cap}
 nz={nz_path}
 zmin={zmin}
 zmax={zmax}
+suffix={suffix}
 cat={box_path}
 boxL={boxL}
 
 mkdir -p $workdir
-python $PREP_EXE --catalog_path $cat --boxsize $boxL{rewrite_flag} --workdir $workdir --footprint $footprint --galactic_cap $GC --nz_path $nz --zmin $zmin --zmax $zmax
+python $PREP_EXE --catalog_path $cat --boxsize $boxL{rewrite_flag} --workdir $workdir --footprint $footprint --galactic_cap $GC --nz_path $nz --zmin $zmin --zmax $zmax --suffix $suffix
 echo "\nRunning cutsky..."
-~/lib/cutsky/CUTSKY -c $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}.conf > $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}.log 2>&1
+~/lib/cutsky/CUTSKY -c $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}_${{suffix}}.conf > $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}_${{suffix}}.log 2>&1
 echo "Done."
 """
     if write_to is not None:

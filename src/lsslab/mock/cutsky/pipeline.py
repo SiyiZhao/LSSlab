@@ -207,6 +207,7 @@ class CutskyRunner:
                         nz_path=nz_path[cap],
                         zmin=zmin,
                         zmax=zmax,
+                        suffix=f"ran{case_id}",
                         rewrite_cat=rewrite_cat,
                         prep_exe=prep_exe,
                         write_to=script_path,

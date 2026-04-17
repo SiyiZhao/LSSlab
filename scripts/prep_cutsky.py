@@ -63,6 +63,7 @@ def parse_args():
     parser.add_argument('--nz_path', type=str, default='/global/homes/s/siyizhao/projects/fihobi/data/nz/QSO_NGC_nz_v2.txt', help='Path to the n(z) file.')
     parser.add_argument('--zmin', type=float, default=2.8, help='Minimum redshift.')
     parser.add_argument('--zmax', type=float, default=3.5, help='Maximum redshift.')
+    parser.add_argument('--suffix', type=str, default='', help='Suffix for output files.')
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -78,9 +79,10 @@ if __name__ == "__main__":
     nz_path = args.nz_path
     zmin = args.zmin
     zmax = args.zmax
+    suffix = args.suffix
     box_path = WORKDIR + f'/box_{zmin}_{zmax}.dat'
-    lc_path = WORKDIR + f'/cutsky_{galactic_cap}_{zmin}_{zmax}.dat'
-    write_to = WORKDIR + f'/cutsky_{galactic_cap}_{zmin}_{zmax}.conf'
+    lc_path = WORKDIR + f'/cutsky_{galactic_cap}_{zmin}_{zmax}_{suffix}.dat'
+    write_to = WORKDIR + f'/cutsky_{galactic_cap}_{zmin}_{zmax}_{suffix}.conf'
 
     if args.rewrite_cat:
         prep_cat_in_ASCII_format(
