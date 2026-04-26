@@ -21,12 +21,14 @@ def main() -> None:
     for path in box_paths:
         print(path)
 
+    # summarize the directory
     print("\nSummary:")
     summary = collect_random_box_summary(workdir)
     print(summary)
 
-    print("\nSummary dict:")
-    print(summary.to_dict())
+    # can also print the full dict if needed
+    # print("\nSummary dict:")
+    # print(summary.to_dict())
 
 
 if __name__ == "__main__":
