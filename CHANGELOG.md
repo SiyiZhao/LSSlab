@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.0] - 2026-04-28
+## [0.3.1] - 2026-04-28
 
 ### Added
 - `tools.random_box` module for generating random boxes with shared `num` and different seeds, supporting multi-seed random workflows.
@@ -9,7 +9,7 @@
 - Re-write `mock.cutsky`.
 
 ### Published
-- Released on PyPI: https://pypi.org/project/LSSlab/0.3.0/
+- Released on PyPI: https://pypi.org/project/LSSlab/0.3.1/
 
 ## [0.2.3] - 2026-04-16
 
