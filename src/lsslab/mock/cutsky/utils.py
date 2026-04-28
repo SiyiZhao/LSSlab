@@ -119,24 +119,19 @@ def read_cutsky_data(
     """
     filepath = Path(filepath)
 
-    # The input file uses a commented header line, so we read with explicit
-    # column names and keep only the columns needed downstream.
-    df = pd.read_csv(
-        filepath,
-        sep=r"\s+",
-        comment="#",
-        header=None,
-        names=["RA", "DEC", "Z", "Z_COSMO", "NZ", "STATUS", "RAN_NUM_0_1"],
-        dtype={
-            "RA": np.float64,
-            "DEC": np.float64,
-            "Z": np.float64,
-            "NZ": np.float64,
-            "STATUS": np.int64,
-        },
-        usecols=["RA", "DEC", "Z", "NZ", "STATUS"],
-    )
-
+    data = np.loadtxt(filepath)
+    status = data[:,5]
+    ra = data[:,0]
+    dec = data[:,1]
+    z_obs = data[:,2]
+    nz = data[:,4]
+    df = pd.DataFrame({
+        "RA": ra,
+        "DEC": dec,
+        "Z": z_obs,
+        "NZ": nz,
+        "STATUS": status,
+    })
     if status_select is not None:
         return df.loc[df["STATUS"] == status_select, ["RA", "DEC", "Z", "NZ"]].reset_index(drop=True)
     else:
