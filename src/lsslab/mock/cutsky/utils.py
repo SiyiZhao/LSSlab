@@ -135,7 +135,7 @@ def read_cutsky_data(
             "NZ": np.float64,
             "STATUS": np.int64,
         },
-        usecols=["RA", "DEC", "Z", "NZ", "STATUS"],
+        usecols=[0, 1, 2, 4, 5],
     )
 
     if status_select is not None:
