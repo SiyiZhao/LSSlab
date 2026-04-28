@@ -58,4 +58,4 @@ random_boxL{boxsize}_N{num}_seed{seed}.dat
 - 下游 catalog 翻译
 - 文件内容完整性校验
 
-因此它适合作为上层 workflow（如 cutsky pipeline）可复用的基础组件。
+因此它适合作为上层 workflow（如 CutskyRunner）可复用的基础组件。

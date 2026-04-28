@@ -4,7 +4,7 @@ Mock-generation toolkit entrypoint for LSSlab.
 Submodules
 ----------
 cutsky
-    Pipeline and utilities for cutsky-based catalog generation.
+    Runner and utilities for cutsky-based catalog generation.
     Includes config rendering, n(z) file preparation, and script generation.
 """
 
