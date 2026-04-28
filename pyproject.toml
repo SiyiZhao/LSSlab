@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "LSSlab"                # display name; normalized to lsslab in index
-version = "0.3.2"
+version = "0.3.3"
 description = "Cosmological Large-Scale Structure Analysis Lab."
 readme = "README.md"
 license = { text = "BSD 3-Clause License" }
