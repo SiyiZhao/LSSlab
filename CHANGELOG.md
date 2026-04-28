@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.4] - 2026-04-28
+
+### Fixed
+- Fixed data reading paths in scripts that were causing file not found errors.
+- Fixed cutsky data reading to use numpy instead of pandas for better performance.
+
+### Published
+- Released on PyPI: https://pypi.org/project/LSSlab/0.3.4/
+
 ## [0.3.3] - 2026-04-28
 
 ### Added
