@@ -127,7 +127,6 @@ def read_cutsky_data(
         comment="#",
         header=None,
         names=["RA", "DEC", "Z", "Z_COSMO", "NZ", "STATUS", "RAN_NUM_0_1"],
-        engine="python",
         dtype={
             "RA": np.float64,
             "DEC": np.float64,
