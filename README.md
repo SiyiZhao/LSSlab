@@ -12,6 +12,12 @@ Install from PyPI:
 pip install LSSlab
 ```
 
+Or with `uv`:
+
+```bash
+uv add LSSlab
+```
+
 Alternatively, install from a local clone with `uv`:
 
 ```bash
