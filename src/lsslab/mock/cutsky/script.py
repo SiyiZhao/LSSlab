@@ -24,7 +24,7 @@ def cutsky_script(
     nz_path: Path | str = LSSLAB_ROOT / "examples/data/example_nz.txt",
     zmin: float = 0.4,
     zmax: float = 0.6,
-    suffix: str = "",
+    suffix: str | None = None,
     rewrite_cat: bool = True,
     prep_exe: Path | str | None = None,
     write_to: Path | str | None = None,
@@ -92,6 +92,8 @@ def cutsky_script(
         if rewrite_cat
         else ""
     )
+    suffix_setup = f"suffix={suffix}\n" if suffix is not None else ""
+    suffix = f"_{suffix}" if suffix is not None else ""
 
     scripts = f"""#!/bin/bash
 set -euo pipefail
@@ -105,13 +107,13 @@ GC={galactic_cap}
 nz={nz_path}
 zmin={zmin}
 zmax={zmax}
-suffix={suffix}
+{suffix_setup}
 mock_path={box_path}
 boxL={boxL}
 
 mkdir -p $workdir
 {prep_run}echo "\nRunning cutsky..."
-~/lib/cutsky/CUTSKY -c $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}_${{suffix}}.conf > $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}_${{suffix}}.log 2>&1
+~/lib/cutsky/CUTSKY -c $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}{suffix}.conf > $workdir/cutsky_${{GC}}_${{zmin}}_${{zmax}}{suffix}.log 2>&1
 echo "Done."
 """
     if write_to is not None:

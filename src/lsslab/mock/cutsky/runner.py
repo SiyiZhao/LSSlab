@@ -190,7 +190,7 @@ class CutskyRunner:
                 
                 cutsky_script(
                     workdir=wd,
-                    box_path=effective_box_path,
+                    box_path=box_path,
                     boxL=self.mock.boxL,
                     footprint=self.footprint_path,
                     galactic_cap=cap,

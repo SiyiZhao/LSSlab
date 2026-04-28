@@ -75,6 +75,7 @@ def main() -> None:
     runner.prepare_nz()
     runner.runner_for_mock()
     runner.runner_for_random()
+    runner.generate_translation()
 
 
 if __name__ == "__main__":
